@@ -1,10 +1,12 @@
-export default function Input({ type, name, placeholder }) {
+export default function Input({ value, onChange, type, name, placeholder }) {
   return (
     <div className="mt-2">
       <input
         id="email"
         type={type}
         name={name}
+        value={value}
+        onChange={onChange}
         placeholder={placeholder}
         required
         autoComplete="email"
