@@ -1,4 +1,9 @@
-export default function SuccessModal({ closeModal, title, message }) {
+export default function SuccessModal({
+  closeModal,
+  title,
+  message,
+  handleRedirect,
+}) {
   return (
     <el-dialog>
       <dialog
@@ -49,7 +54,15 @@ export default function SuccessModal({ closeModal, title, message }) {
               <button
                 type="button"
                 onClick={closeModal}
-                className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-400 "
+                className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 "
+              >
+                Fechar
+              </button>
+
+              <button
+                type="button"
+                onClick={handleRedirect}
+                className="mr-5 inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-400 "
               >
                 Confirmar
               </button>
