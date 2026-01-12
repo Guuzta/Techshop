@@ -2,7 +2,7 @@ export default function Input({ value, onChange, type, name, placeholder }) {
   return (
     <div className="mt-2">
       <input
-        id="email"
+        id={name}
         type={type}
         name={name}
         value={value}
