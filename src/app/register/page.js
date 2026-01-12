@@ -30,11 +30,14 @@ export default function Register() {
     setSuccess("");
 
     try {
-      const res = await fetch("http://34.39.165.193/users/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, password }),
+        }
+      );
 
       const data = await res.json();
       const { success } = data;
@@ -149,6 +152,8 @@ export default function Register() {
           message="Seu cadastro foi efetuado com sucesso! Você já pode fazer
           login e começar a usar todos os recursos disponíveis."
           handleRedirect={handleRedirect}
+          showConfirmButton={true}
+          showDenyButton={true}
         />
       )}
     </div>

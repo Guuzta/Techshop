@@ -3,6 +3,8 @@ export default function SuccessModal({
   title,
   message,
   handleRedirect,
+  showConfirmButton,
+  showDenyButton,
 }) {
   return (
     <el-dialog>
@@ -34,7 +36,7 @@ export default function SuccessModal({
                   ></path>
                 </svg>
               </div>
-              <div className="sm:flex sm:items-start">
+              <div className="sm:items-start">
                 <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                   <h3
                     id="dialog-title"
@@ -50,22 +52,26 @@ export default function SuccessModal({
                 </div>
               </div>
             </div>
-            <div className="bg-gray-700/25 px-3 py-3 sm:flex sm:flex-row-reverse  justify-center">
-              <button
-                type="button"
-                onClick={closeModal}
-                className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 "
-              >
-                Fechar
-              </button>
+            <div className="bg-gray-700/25 px-3 py-3  justify-center space-between">
+              {showConfirmButton && (
+                <button
+                  type="button"
+                  onClick={handleRedirect}
+                  className="my-1 inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-400 "
+                >
+                  Confirmar
+                </button>
+              )}
 
-              <button
-                type="button"
-                onClick={handleRedirect}
-                className="mr-5 inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-400 "
-              >
-                Confirmar
-              </button>
+              {showDenyButton && (
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="my-1 inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-400 "
+                >
+                  Fechar
+                </button>
+              )}
             </div>
           </el-dialog-panel>
         </div>
