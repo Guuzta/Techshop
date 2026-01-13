@@ -6,8 +6,8 @@ import Link from "next/link";
 
 import { UserPlusIcon } from "@heroicons/react/24/solid";
 
-import Input from "../components/Input";
-import SuccessModal from "../components/SuccessModal";
+import Input from "../../components/Input";
+import SuccessModal from "../../components/SuccessModal";
 
 export default function Register() {
   const [name, setName] = useState("");
