@@ -22,7 +22,7 @@ export default function NavBar() {
   const navigation = [
     { name: "Home", href: "/", current: true },
     { name: "Produtos", href: "/products", current: false },
-    { name: "Contato", href: "/contact", current: false },
+    { name: "Anunciar", href: "/contact", current: false },
     { name: "Sobre", href: "/about", current: false },
   ];
 
