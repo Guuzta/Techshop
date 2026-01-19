@@ -22,7 +22,7 @@ export default function NavBar() {
   const navigation = [
     { name: "Home", href: "/", current: true },
     { name: "Produtos", href: "/products", current: false },
-    { name: "Anunciar", href: "/contact", current: false },
+    { name: "Anunciar", href: "/publish", current: false },
     { name: "Sobre", href: "/about", current: false },
   ];
 
@@ -67,7 +67,7 @@ export default function NavBar() {
                         isActive
                           ? "bg-gray-950/50 text-indigo-500"
                           : "text-gray-300 hover:bg-white/5 hover:text-white",
-                        "rounded-md px-3 py-2 text-sm font-medium"
+                        "rounded-md px-3 py-2 text-sm font-medium",
                       )}
                     >
                       {item.name}
@@ -137,7 +137,7 @@ export default function NavBar() {
                   isActive
                     ? "bg-gray-950/50 text-indigo-500"
                     : "text-gray-300 hover:bg-white/5 hover:text-white",
-                  "block rounded-md px-3 py-2 text-base font-medium"
+                  "block rounded-md px-3 py-2 text-base font-medium",
                 )}
               >
                 {item.name}
