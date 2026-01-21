@@ -1,9 +1,59 @@
 "use client";
 
+import { useDropzone } from "react-dropzone";
+
+import { useFormik } from "formik";
+import productSchema from "./productSchema";
+
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 
 export default function Publish() {
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop: (acceptedFiles) => formik.setFieldValue("file", acceptedFiles[0]),
+    multiple: false,
+    maxFiles: 1,
+    noClick: true,
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      description: "",
+      price: "",
+      stock: "",
+      file: null,
+    },
+    validationSchema: productSchema,
+    onSubmit: async (values) => {
+      const token = localStorage.getItem("accessToken");
+      const formData = new FormData();
+
+      formData.append("name", values.name);
+      formData.append("description", values.description);
+      formData.append("price", values.price);
+      formData.append("stock", values.stock);
+      formData.append("image", values.file);
+
+      try {
+        console.log(values);
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        });
+
+        console.log("Produto cadastrado com sucesso!");
+      } catch (error) {
+        console.log("Deu erro!");
+        console.log(error);
+      }
+    },
+  });
+
   return (
     <>
       <NavBar />
@@ -14,8 +64,8 @@ export default function Publish() {
         <h2 className="text-white">Adicione um produto ao seu catálogo</h2>
       </div>
 
-      <main className="mx-8 my-20 max-w-2x1 px-4 py-8 border border-gray-300/10 bg-gray-800/50 scheme-dark mx-auto  sm:px-6 lg:max-w-4xl lg:px-8 lg:mx-auto">
-        <form>
+      <main className="mx-8 my-20 max-w-sm px-4 py-8 border border-gray-300/10 bg-gray-800/50 scheme-dark mx-auto  sm:px-6 lg:max-w-4xl lg:px-8 lg:mx-auto">
+        <form onSubmit={formik.handleSubmit} action="#" method="POST">
           <div className="space-y-12">
             <div className="border-b border-white/10 pb-12">
               <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -30,10 +80,20 @@ export default function Publish() {
                     <input
                       id="name"
                       type="text"
+                      value={formik.values.name}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       name="name"
                       autoComplete="given-name"
-                      className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                      className={`block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 
+                      ${formik.touched.name && formik.errors.name && "border border-red-500 focus:border-0"}`}
                     />
+
+                    {formik.touched.name && formik.errors.name && (
+                      <span className="block italic mt-2 text-sm text-red-500">
+                        {formik.errors.name}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -51,9 +111,20 @@ export default function Publish() {
                     <textarea
                       id="description"
                       name="description"
+                      value={formik.values.description}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       rows="3"
-                      className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                      className={`block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 
+                      ${formik.touched.description && formik.errors.description && "border border-red-500 focus:border-0"}`}
                     ></textarea>
+
+                    {formik.touched.description &&
+                      formik.errors.description && (
+                        <span className="block italic mt-2 text-sm text-red-500">
+                          {formik.errors.description}
+                        </span>
+                      )}
                   </div>
                 </div>
 
@@ -68,10 +139,19 @@ export default function Publish() {
                     <input
                       id="price"
                       type="text"
+                      value={formik.values.price}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       name="price"
                       autoComplete="given-name"
-                      className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                      className={`block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 ${formik.touched.price && formik.errors.price && "border border-red-500 focus:border-0"}`}
                     />
+
+                    {formik.touched.price && formik.errors.price && (
+                      <span className="block italic mt-2 text-sm text-red-500">
+                        {formik.errors.price}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -86,10 +166,19 @@ export default function Publish() {
                     <input
                       id="stock"
                       type="text"
+                      value={formik.values.stock}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       name="stock"
                       autoComplete="given-name"
-                      className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                      className={`block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 ${formik.touched.stock && formik.errors.stock && "border border-red-500 focus:border-0"}`}
                     />
+
+                    {formik.touched.stock && formik.errors.stock && (
+                      <span className="block italic mt-2 text-sm text-red-500">
+                        {formik.errors.stock}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -100,7 +189,9 @@ export default function Publish() {
                   >
                     Foto
                   </label>
-                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-10">
+                  <div
+                    className={`mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-10 ${formik.touched.file && formik.errors.file && "border border-red-500 focus:border-0"}`}
+                  >
                     <div className="text-center">
                       <svg
                         viewBox="0 0 24 24"
@@ -115,18 +206,13 @@ export default function Publish() {
                           fillRule="evenodd"
                         />
                       </svg>
-                      <div className="mt-4 flex text-sm/6 text-gray-400">
-                        <label
-                          htmlFor="file-upload"
-                          className="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-400 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-500 hover:text-indigo-300"
-                        >
+                      <div
+                        {...getRootProps()}
+                        className="mt-4 flex text-sm/6 text-gray-400"
+                      >
+                        <label className="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-400 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-500 hover:text-indigo-300">
                           <span>Adicione um arquivo</span>
-                          <input
-                            id="file-upload"
-                            type="file"
-                            name="file-upload"
-                            className="sr-only"
-                          />
+                          <input {...getInputProps()} />
                         </label>
                         <p className="pl-1">ou arraste e solte</p>
                       </div>
@@ -135,6 +221,11 @@ export default function Publish() {
                       </p>
                     </div>
                   </div>
+                  {formik.touched.file && formik.errors.file && (
+                    <span className="block italic mt-2 text-sm text-red-500">
+                      {formik.errors.file}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
