@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import Image from "next/image";
 
 import { useFormik } from "formik";
 import productSchema from "./productSchema";
@@ -9,12 +11,28 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 
 export default function Publish() {
-  const { getRootProps, getInputProps, open } = useDropzone({
-    onDrop: (acceptedFiles) => {
-      formik.setFieldValue("file", acceptedFiles[0]);
+  const [file, setPreview] = useState(null);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (acceptedFiles, rejectedFiles) => {
+      const file = acceptedFiles[0] || rejectedFiles[0];
+
+      formik.setFieldTouched("file", true);
+      formik.setFieldValue("file", file);
 
       const selectedFile = acceptedFiles[0];
-      console.log(selectedFile);
+
+      if (selectedFile) {
+        setPreview({
+          ...selectedFile,
+          preview: URL.createObjectURL(selectedFile),
+        });
+      }
+    },
+    accept: {
+      "image/png": [".png"],
+      "image/jpeg": [".jpeg"],
+      "image/jpg": ["jpg"],
     },
     multiple: false,
     maxFiles: 1,
@@ -41,8 +59,6 @@ export default function Publish() {
       formData.append("image", values.file);
 
       try {
-        console.log(values);
-
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
           method: "POST",
           headers: {
@@ -58,6 +74,14 @@ export default function Publish() {
       }
     },
   });
+
+  useEffect(() => {
+    return () => {
+      if (file?.preview) {
+        URL.revokeObjectURL(file.preview);
+      }
+    };
+  }, [file]);
 
   return (
     <>
@@ -187,7 +211,7 @@ export default function Publish() {
                   </div>
                 </div>
 
-                <div className="col-span-full">
+                <div className="col-span-3">
                   <label
                     htmlFor="image"
                     className="block text-sm/6 font-medium text-white"
@@ -196,7 +220,7 @@ export default function Publish() {
                   </label>
                   <div
                     {...getRootProps()}
-                    className={`mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-10 ${formik.touched.file && formik.errors.file && "border border-red-500 focus:border-0"}`}
+                    className={`h-full min-h-72 max-h-72 mt-2 flex justify-center items-center rounded-lg border border-dashed border-white/25 px-6 py-10 ${formik.touched.file && formik.errors.file && "!border-red-500 "}`}
                   >
                     <div className="text-center">
                       <svg
@@ -215,7 +239,10 @@ export default function Publish() {
                       <div className="mt-4 flex text-sm/6 text-gray-400">
                         <label className="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-400 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-500 hover:text-indigo-300">
                           <span>Adicione um arquivo</span>
-                          <input {...getInputProps()} />
+                          <input
+                            onClick={() => formik.setFieldTouched("file", true)}
+                            {...getInputProps()}
+                          />
                         </label>
                         <p className="pl-1">ou arraste e solte</p>
                       </div>
@@ -229,6 +256,25 @@ export default function Publish() {
                       {formik.errors.file}
                     </span>
                   )}
+                </div>
+                <div className="col-span-3">
+                  <label
+                    htmlFor="image"
+                    className="block text-sm/6 font-medium text-white"
+                  >
+                    Preview
+                  </label>
+                  <div className="h-full min-h-72 max-h-72 mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-2 py-4">
+                    {file && (
+                      <Image
+                        className="w-full rounded-lg"
+                        width={500}
+                        height={500}
+                        src={file.preview}
+                        alt="Product Image"
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

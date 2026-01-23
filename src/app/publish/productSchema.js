@@ -22,14 +22,14 @@ const productSchema = object({
   file: mixed()
     .required("O envio de uma imagem é obrigatório")
     .test(
-      "fileSize",
-      "O arquivo é muito grande",
-      (value) => value && value.size <= FILE_SIZE,
-    )
-    .test(
       "fileFormat",
       "Formato não suportado",
       (value) => value && SUPPORTED_FORMATS.includes(value.type),
+    )
+    .test(
+      "fileSize",
+      "O arquivo é muito grande",
+      (value) => value && value.size <= FILE_SIZE,
     ),
 });
 
