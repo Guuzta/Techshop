@@ -56,7 +56,7 @@ export default function SuccessModal({
               {showConfirmButton && (
                 <button
                   type="button"
-                  onClick={handleRedirect}
+                  onClick={handleRedirect ? handleRedirect : closeModal}
                   className="my-1 inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white hover:bg-green-400 "
                 >
                   Confirmar

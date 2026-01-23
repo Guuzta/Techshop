@@ -9,9 +9,11 @@ import productSchema from "./productSchema";
 
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import SuccessModal from "@/components/SuccessModal";
 
 export default function Publish() {
-  const [file, setPreview] = useState(null);
+  const [file, setFile] = useState(null);
+  const [isOpen, setIsOpen] = useState(true);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles, rejectedFiles) => {
@@ -23,7 +25,7 @@ export default function Publish() {
       const selectedFile = acceptedFiles[0];
 
       if (selectedFile) {
-        setPreview({
+        setFile({
           ...selectedFile,
           preview: URL.createObjectURL(selectedFile),
         });
@@ -67,7 +69,11 @@ export default function Publish() {
           body: formData,
         });
 
-        console.log("Produto cadastrado com sucesso!");
+        if (res.ok) {
+          setIsOpen(true);
+          formik.resetForm();
+          setFile(null);
+        }
       } catch (error) {
         console.log("Deu erro!");
         console.log(error);
@@ -285,9 +291,18 @@ export default function Publish() {
               type="submit"
               className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             >
-              Cadastrar produto
+              {formik.isSubmitting ? "Cadastrando..." : "Cadastrar produto"}
             </button>
           </div>
+
+          {isOpen && (
+            <SuccessModal
+              closeModal={() => setIsOpen(false)}
+              title="Produto cadastrado com sucesso!"
+              showConfirmButton={true}
+              showDenyButton={false}
+            />
+          )}
         </form>
       </main>
       <Footer />
