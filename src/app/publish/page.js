@@ -10,7 +10,12 @@ import Footer from "@/components/Footer";
 
 export default function Publish() {
   const { getRootProps, getInputProps, open } = useDropzone({
-    onDrop: (acceptedFiles) => formik.setFieldValue("file", acceptedFiles[0]),
+    onDrop: (acceptedFiles) => {
+      formik.setFieldValue("file", acceptedFiles[0]);
+
+      const selectedFile = acceptedFiles[0];
+      console.log(selectedFile);
+    },
     multiple: false,
     maxFiles: 1,
     noClick: true,
@@ -190,6 +195,7 @@ export default function Publish() {
                     Foto
                   </label>
                   <div
+                    {...getRootProps()}
                     className={`mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-10 ${formik.touched.file && formik.errors.file && "border border-red-500 focus:border-0"}`}
                   >
                     <div className="text-center">
@@ -206,10 +212,7 @@ export default function Publish() {
                           fillRule="evenodd"
                         />
                       </svg>
-                      <div
-                        {...getRootProps()}
-                        className="mt-4 flex text-sm/6 text-gray-400"
-                      >
+                      <div className="mt-4 flex text-sm/6 text-gray-400">
                         <label className="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-400 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-indigo-500 hover:text-indigo-300">
                           <span>Adicione um arquivo</span>
                           <input {...getInputProps()} />
