@@ -10,10 +10,12 @@ import productSchema from "./productSchema";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import SuccessModal from "@/components/SuccessModal";
+import ErrorToast from "@/components/ErrorToast";
 
 export default function Publish() {
   const [file, setFile] = useState(null);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles, rejectedFiles) => {
@@ -75,7 +77,7 @@ export default function Publish() {
           setFile(null);
         }
       } catch (error) {
-        console.log("Deu erro!");
+        handleShowToast();
         console.log(error);
       }
     },
@@ -88,6 +90,14 @@ export default function Publish() {
       }
     };
   }, [file]);
+
+  const handleShowToast = () => {
+    setShowToast(true);
+
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+  };
 
   return (
     <>
@@ -289,9 +299,13 @@ export default function Publish() {
           <div className="mt-6 flex items-center justify-end gap-x-6">
             <button
               type="submit"
-              className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              className={`rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 
+              ${formik.isSubmitting ? "opacity-50 bg-gray-500" : ""}`}
+              disabled={formik.isSubmitting}
             >
-              {formik.isSubmitting ? "Cadastrando..." : "Cadastrar produto"}
+              {formik.isSubmitting
+                ? "Cadastrando produto..."
+                : "Cadastrar produto"}
             </button>
           </div>
 
@@ -303,6 +317,8 @@ export default function Publish() {
               showDenyButton={false}
             />
           )}
+
+          <ErrorToast showToast={showToast} />
         </form>
       </main>
       <Footer />
