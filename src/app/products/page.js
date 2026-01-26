@@ -6,12 +6,14 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import ErrorToast from "@/components/ErrorToast";
+import Loader from "@/components/Loader";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [showToast, setShowToast] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleShowToast = () => {
     setShowToast(true);
@@ -27,7 +29,7 @@ export default function Products() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
         const data = await res.json();
         setProducts(data.products);
-        console.log(data.products);
+        setIsLoading(false);
       } catch (error) {
         handleShowToast();
         console.log(error);
@@ -36,6 +38,10 @@ export default function Products() {
 
     fetchData();
   }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <>
