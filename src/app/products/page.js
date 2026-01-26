@@ -1,12 +1,42 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
+import ErrorToast from "@/components/ErrorToast";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 export default function Products() {
+  const [products, setProducts] = useState([]);
+  const [showToast, setShowToast] = useState(false);
+
+  const handleShowToast = () => {
+    setShowToast(true);
+
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+        const data = await res.json();
+        setProducts(data.products);
+        console.log(data.products);
+      } catch (error) {
+        handleShowToast();
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <NavBar />
@@ -29,13 +59,18 @@ export default function Products() {
       </div>
 
       <main className="max-w-7xl m-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2  gap-x-4 gap-y-12 justify-start px-12 pb-12 ">
-        <ProductCard
-          isAvailable={true}
-          name="Notebook Gamer Acer Nitro V ANV15-51-57WS"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis vitae
-          ante vel eros fermentum faucibus sit amet euismod lorem."
-          price="R$ 4.399"
-        />
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            isAvailable={product.stock}
+            name={product.name}
+            description={product.description}
+            price={`R$${product.price}`}
+            imageUrl={product.imageUrl}
+          />
+        ))}
+
+        <ErrorToast showToast={showToast} />
       </main>
 
       <Footer />
