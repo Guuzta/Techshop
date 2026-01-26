@@ -12,6 +12,8 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [showToast, setShowToast] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,10 +27,16 @@ export default function Products() {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/products?page=${page}&limit=10`,
+        );
         const data = await res.json();
+
         setProducts(data.products);
+        setTotalPages(data.meta.totalPages);
+        console.log(data);
         setIsLoading(false);
       } catch (error) {
         handleShowToast();
@@ -37,7 +45,7 @@ export default function Products() {
     };
 
     fetchData();
-  }, []);
+  }, [page]);
 
   return (
     <>
@@ -78,6 +86,46 @@ export default function Products() {
           <ErrorToast showToast={showToast} />
         </main>
       )}
+
+      <nav className="mb-8 mx-auto w-fit flex items-center p-1 rounded bg-gray-800/50 space-x-2">
+        <button
+          onClick={() => setPage((prev) => prev - 1)}
+          disabled={page === 1 || isLoading}
+          className="p-1 rounded  text-white bg-gray-800/50 hover:text-white hover:bg-indigo-600 hover:border-indigo-600"
+          href="#"
+        >
+          <svg
+            className="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
+            />
+          </svg>
+        </button>
+        <p className="text-gray-500">{`Página ${page} de ${totalPages}`}</p>
+        <button
+          onClick={() => setPage((prev) => prev + 1)}
+          disabled={page === totalPages || isLoading}
+          className="p-1 rounded text-white bg-gray-800/50 hover:text-white hover:bg-indigo-600 hover:border-indigo-600"
+          href="#"
+        >
+          <svg
+            className="w-5 h-5"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fillRule="evenodd"
+              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+            />
+          </svg>
+        </button>
+      </nav>
 
       <Footer />
     </>
