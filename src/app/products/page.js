@@ -39,10 +39,6 @@ export default function Products() {
     fetchData();
   }, []);
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
   return (
     <>
       <NavBar />
@@ -64,20 +60,24 @@ export default function Products() {
         </div>
       </div>
 
-      <main className="max-w-7xl m-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2  gap-x-4 gap-y-12 justify-start px-12 pb-12 ">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            isAvailable={product.stock}
-            name={product.name}
-            description={product.description}
-            price={`R$${product.price}`}
-            imageUrl={product.imageUrl}
-          />
-        ))}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <main className="max-w-7xl m-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2  gap-x-4 gap-y-12 justify-start px-12 pb-12 ">
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              isAvailable={product.stock}
+              name={product.name}
+              description={product.description}
+              price={`R$${product.price}`}
+              imageUrl={product.imageUrl}
+            />
+          ))}
 
-        <ErrorToast showToast={showToast} />
-      </main>
+          <ErrorToast showToast={showToast} />
+        </main>
+      )}
 
       <Footer />
     </>
