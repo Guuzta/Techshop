@@ -13,6 +13,8 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [inputValue, setInputValue] = useState("");
   const [totalPages, setTotalPages] = useState(1);
   const [showToast, setShowToast] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,12 +27,16 @@ export default function Products() {
     }, 3000);
   };
 
+  const handleSearch = (value) => {
+    setSearch(value);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/products?page=${page}&limit=10`,
+          `${process.env.NEXT_PUBLIC_API_URL}/products?page=${page}&limit=10&name=${search}`,
         );
         const data = await res.json();
 
@@ -44,7 +50,7 @@ export default function Products() {
     };
 
     fetchData();
-  }, [page]);
+  }, [page, search]);
 
   return (
     <>
@@ -52,13 +58,18 @@ export default function Products() {
       <div className="py-16 flex w-full justify-center items-center">
         <div className="flex relative w-full px-4 max-w-xl md:max-w-4xl">
           <input
+            onChange={(e) => setInputValue(e.target.value)}
             type="text"
             name="q"
+            value={inputValue}
             id="query"
             placeholder="Pesquise por um produto do seu interesse..."
             className="block w-full rounded-tl-md rounded-bl-md bg-white px-3 py-1.5 text-base  outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6 placeholder:italic"
           />
-          <button className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-md font-semibold py-3 px-6 rounded-r-md">
+          <button
+            onClick={() => handleSearch(inputValue)}
+            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-md font-semibold py-3 px-6 rounded-r-md"
+          >
             <span>Pesquisar</span>
             <span className="hidden md:block">
               <MagnifyingGlassIcon className="size-6 text-white" />
