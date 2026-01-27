@@ -36,7 +36,6 @@ export default function Products() {
 
         setProducts(data.products);
         setTotalPages(data.meta.totalPages);
-        console.log(data);
         setIsLoading(false);
       } catch (error) {
         handleShowToast();
@@ -71,61 +70,63 @@ export default function Products() {
       {isLoading ? (
         <Loader />
       ) : (
-        <main className="max-w-7xl m-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2  gap-x-4 gap-y-12 justify-start px-12 pb-12 ">
-          {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              isAvailable={product.stock}
-              name={product.name}
-              description={product.description}
-              price={`R$${product.price}`}
-              imageUrl={product.imageUrl}
-            />
-          ))}
+        <div>
+          <main className="max-w-7xl m-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2  gap-x-4 gap-y-12 justify-start px-12 pb-12 ">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                isAvailable={product.stock}
+                name={product.name}
+                description={product.description}
+                price={`R$${product.price}`}
+                imageUrl={product.imageUrl}
+              />
+            ))}
+          </main>
 
-          <ErrorToast showToast={showToast} />
-        </main>
+          <nav className="mb-8 mx-auto w-fit flex items-center p-1 rounded bg-gray-800/50 space-x-2">
+            <button
+              onClick={() => setPage((prev) => prev - 1)}
+              disabled={page === 1 || isLoading}
+              className="p-1 rounded  text-white bg-gray-800/50 hover:text-white hover:bg-indigo-600 hover:border-indigo-600"
+              href="#"
+            >
+              <svg
+                className="w-5 h-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
+                />
+              </svg>
+            </button>
+            <p className="text-gray-500">{`Página ${page} de ${totalPages}`}</p>
+            <button
+              onClick={() => setPage((prev) => prev + 1)}
+              disabled={page === totalPages || isLoading}
+              className="p-1 rounded text-white bg-gray-800/50 hover:text-white hover:bg-indigo-600 hover:border-indigo-600"
+              href="#"
+            >
+              <svg
+                className="w-5 h-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                />
+              </svg>
+            </button>
+          </nav>
+        </div>
       )}
 
-      <nav className="mb-8 mx-auto w-fit flex items-center p-1 rounded bg-gray-800/50 space-x-2">
-        <button
-          onClick={() => setPage((prev) => prev - 1)}
-          disabled={page === 1 || isLoading}
-          className="p-1 rounded  text-white bg-gray-800/50 hover:text-white hover:bg-indigo-600 hover:border-indigo-600"
-          href="#"
-        >
-          <svg
-            className="w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
-            />
-          </svg>
-        </button>
-        <p className="text-gray-500">{`Página ${page} de ${totalPages}`}</p>
-        <button
-          onClick={() => setPage((prev) => prev + 1)}
-          disabled={page === totalPages || isLoading}
-          className="p-1 rounded text-white bg-gray-800/50 hover:text-white hover:bg-indigo-600 hover:border-indigo-600"
-          href="#"
-        >
-          <svg
-            className="w-5 h-5"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="currentColor"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
-            />
-          </svg>
-        </button>
-      </nav>
+      <ErrorToast showToast={showToast} />
 
       <Footer />
     </>
