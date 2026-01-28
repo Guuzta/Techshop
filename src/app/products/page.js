@@ -80,7 +80,7 @@ export default function Products() {
 
       {isLoading ? (
         <Loader />
-      ) : (
+      ) : products.length > 0 ? (
         <div>
           <main className="max-w-7xl m-auto grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2  gap-x-4 gap-y-12 justify-start px-12 pb-12 ">
             {products.map((product) => (
@@ -134,6 +134,15 @@ export default function Products() {
               </svg>
             </button>
           </nav>
+        </div>
+      ) : (
+        <div className="flex items-center justify-center h-screen">
+          <div className=" mx-auto text-center bg-opacity-90 p-8 ">
+            <div className="text-9xl font-bold text-indigo-600 mb-8">:(</div>
+            <h1 className="text-4xl font-bold text-white mb-6">
+              Oops! Parece que nenhum produto foi encontrado
+            </h1>
+          </div>
         </div>
       )}
 
