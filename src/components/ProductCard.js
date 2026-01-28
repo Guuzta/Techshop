@@ -1,4 +1,9 @@
+"use client";
+
+import { useState } from "react";
+
 import Image from "next/image";
+import SuccessModal from "./SuccessModal";
 
 export default function ProductCard({
   isAvailable,
@@ -6,7 +11,12 @@ export default function ProductCard({
   description,
   price,
   imageUrl,
+  purchaseButton,
+  updateButton,
+  deleteProduct,
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="max-w-xs bg-gray-800 border-2 border-gray-300/10 lg:max-w-xs mx-auto rounded-md overflow-hidden shadow-md hover:shadow-lg">
       <div className="relative">
@@ -30,17 +40,47 @@ export default function ProductCard({
           {description}
         </p>
         <div className="mt-4 flex items-center justify-between">
-          <span className="font-bold text-lg text-white">{price}</span>
-          <button
-            className={`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
-              isAvailable
-                ? ""
-                : "opacity-50 bg-gray-500 cursor-not-allowed hover:bg-gray-500"
-            }`}
-          >
-            Comprar agora
-          </button>
+          <span className="d-block mr-4 font-bold text-lg text-white">
+            {price}
+          </span>
+          {purchaseButton && (
+            <button
+              className={`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded ${
+                isAvailable
+                  ? ""
+                  : "opacity-50 bg-gray-500 cursor-not-allowed hover:bg-gray-500"
+              }`}
+            >
+              Comprar agora
+            </button>
+          )}
+
+          {updateButton && (
+            <>
+              <button className="mr-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                Atualizar
+              </button>
+
+              <button
+                onClick={() => setIsOpen(true)}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+              >
+                Excluir
+              </button>
+            </>
+          )}
         </div>
+
+        {isOpen && (
+          <SuccessModal
+            closeModal={() => setIsOpen(false)}
+            title="Tem certeza que deseja excluir este produto?"
+            message="Ao confirmar essa ação não poderá ser revertida"
+            handleRedirect={deleteProduct}
+            showConfirmButton={true}
+            showDenyButton={true}
+          />
+        )}
       </div>
     </div>
   );
