@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import Image from "next/image";
+import Link from "next/link";
 import SuccessModal from "./SuccessModal";
 
 export default function ProductCard({
@@ -14,6 +15,7 @@ export default function ProductCard({
   purchaseButton,
   updateButton,
   deleteProduct,
+  productId,
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -57,9 +59,11 @@ export default function ProductCard({
 
           {updateButton && (
             <>
-              <button className="mr-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-                Atualizar
-              </button>
+              <Link href={`/profile/myproducts/update/${productId}`}>
+                <button className="mr-2 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
+                  Atualizar
+                </button>
+              </Link>
 
               <button
                 onClick={() => setIsOpen(true)}
