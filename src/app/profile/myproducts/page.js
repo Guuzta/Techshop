@@ -7,12 +7,14 @@ import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
 import ProductCard from "@/components/ProductCard";
 import SuccessModal from "@/components/SuccessModal";
+import ErrorToast from "@/components/ErrorToast";
 
 export default function Profile() {
   const [products, setProducts] = useState([]);
   const [currentProduct, setCurrentProduct] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const handleShowToast = () => {
     setShowToast(true);
@@ -32,6 +34,7 @@ export default function Profile() {
           `${process.env.NEXT_PUBLIC_API_URL}/products/my`,
           {
             headers: {
+              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
           },
@@ -99,6 +102,7 @@ export default function Profile() {
                 imageUrl={product.imageUrl}
                 updateButton={true}
                 deleteProduct={() => deleteProduct(product.id)}
+                productId={product.id}
               />
             ))}
           </main>
@@ -129,6 +133,8 @@ export default function Profile() {
           showDenyButton={false}
         />
       )}
+
+      <ErrorToast showToast={showToast} />
 
       <Footer />
     </>
