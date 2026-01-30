@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import SuccessModal from "@/components/SuccessModal";
 import ErrorToast from "@/components/ErrorToast";
 import Loader from "@/components/Loader";
+import { parse } from "postcss";
 
 export default function Update() {
   const [product, setProduct] = useState({});
@@ -80,7 +81,12 @@ export default function Update() {
               "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ name, description, price, stock }),
+            body: JSON.stringify({
+              name,
+              description,
+              price: parseFloat(price),
+              stock: parseInt(stock),
+            }),
           },
         );
 
