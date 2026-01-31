@@ -103,7 +103,7 @@ export default function Settings() {
             <div className="text-center w-1/2 py-4 border border-gray-300/10 bg-gray-800/50 scheme-dark">
               <PencilSquareIcon className="mb-4 size-9 m-auto text-yellow-500" />
               <Link
-                href="#"
+                href="/profile/settings/update"
                 className="rounded-md bg-yellow-500 px-3.5 py-2.5 text-sm font-semibold text-black shadow-xs hover:bg-yellow-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-500"
               >
                 Editar perfil

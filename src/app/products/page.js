@@ -91,6 +91,7 @@ export default function Products() {
                 description={product.description}
                 price={`R$${product.price}`}
                 imageUrl={product.imageUrl}
+                purchaseButton={true}
               />
             ))}
           </main>
