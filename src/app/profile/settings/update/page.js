@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
 
 import { useFormik } from "formik";
@@ -49,7 +50,7 @@ export default function Update() {
       const { name, email } = values;
 
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -156,7 +157,17 @@ export default function Update() {
               </div>
             </div>
 
-            <div className="mt-6 flex items-center justify-end gap-x-6">
+            <div className="mt-6 flex flex-col items-center gap-y-4 lg:justify-between lg:flex-row">
+              <p className="text-center text-sm/6 text-gray-400">
+                Deseja alterar sua senha?
+                <Link
+                  href="/profile/settings/update/password"
+                  className="font-semibold text-indigo-400 hover:text-indigo-300"
+                >
+                  Clique aqui
+                </Link>
+              </p>
+
               <button
                 type="submit"
                 className={`rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 
