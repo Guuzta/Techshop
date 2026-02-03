@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   Disclosure,
@@ -18,6 +18,7 @@ import { Bars3Icon, XMarkIcon, CpuChipIcon } from "@heroicons/react/24/outline";
 
 export default function NavBar() {
   const pathname = usePathname();
+  const router = useRouter();
 
   const navigation = [
     { name: "Home", href: "/", current: true },
@@ -29,6 +30,29 @@ export default function NavBar() {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+
+  const fecthLogout = async () => {
+    const token = localStorage.getItem("accessToken");
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/logout`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (res.ok) {
+        localStorage.removeItem("accessToken");
+        return router.push("/login");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Disclosure
@@ -113,6 +137,7 @@ export default function NavBar() {
                 </MenuItem>
                 <MenuItem>
                   <Link
+                    onClick={fecthLogout}
                     href="#"
                     className="block px-4 py-2 text-sm text-red-500 data-focus:bg-white/5 data-focus:outline-hidden"
                   >
