@@ -9,14 +9,20 @@ export function useVerifyToken() {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
 
-    if (!isTokenValid(token)) {
-      localStorage.removeItem("accessToken");
-      return router.push("/login");
-    }
+    const fetchData = async () => {
+      const isValid = await isTokenValid(token);
 
-    setTimeout(() => {
-      setAuthenticated(true);
-    }, 0);
+      if (!isValid) {
+        localStorage.removeItem("accessToken");
+        return router.push("/login");
+      }
+
+      setTimeout(() => {
+        setAuthenticated(true);
+      }, 0);
+    };
+
+    fetchData();
   }, [router]);
 
   return authenticated;

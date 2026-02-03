@@ -33,9 +33,10 @@ export default function Register() {
         `${process.env.NEXT_PUBLIC_API_URL}/users/login`,
         {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
-        }
+        },
       );
 
       const data = await res.json();
