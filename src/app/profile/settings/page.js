@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useVerifyToken } from "@/hooks/verifyToken";
 import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
 
@@ -15,6 +16,7 @@ import Loader from "@/components/Loader";
 import ErrorToast from "@/components/ErrorToast";
 
 export default function Settings() {
+  const authenticated = useVerifyToken();
   const [payload, setPayload] = useState("");
   const [userSince, setUserSince] = useState("");
   const [totalProducts, setTotalProducts] = useState(0);
@@ -65,6 +67,10 @@ export default function Settings() {
 
     fecthData();
   }, []);
+
+  if (!authenticated) {
+    return <Loader />;
+  }
 
   return (
     <>

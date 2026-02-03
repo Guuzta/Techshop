@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { useVerifyToken } from "@/hooks/verifyToken";
+
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
@@ -11,6 +13,7 @@ import Loader from "@/components/Loader";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 export default function Products() {
+  const authenticated = useVerifyToken();
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -51,6 +54,10 @@ export default function Products() {
 
     fetchData();
   }, [page, search]);
+
+  if (!authenticated) {
+    return <Loader />;
+  }
 
   return (
     <>

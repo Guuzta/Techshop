@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useVerifyToken } from "@/hooks/verifyToken";
 
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
@@ -10,6 +11,7 @@ import SuccessModal from "@/components/SuccessModal";
 import ErrorToast from "@/components/ErrorToast";
 
 export default function Profile() {
+  const authenticated = useVerifyToken();
   const [products, setProducts] = useState([]);
   const [currentProduct, setCurrentProduct] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -72,6 +74,10 @@ export default function Profile() {
       console.log(error);
     }
   };
+
+  if (!authenticated) {
+    return <Loader />;
+  }
 
   return (
     <>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
+import { useState } from "react";
+import { useVerifyToken } from "@/hooks/verifyToken";
 
 import { useFormik } from "formik";
 import passwordSchema from "./passwordSchema";
@@ -10,8 +10,10 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import SuccessModal from "@/components/SuccessModal";
 import ErrorToast from "@/components/ErrorToast";
+import Loader from "@/components/Loader";
 
 export default function Update() {
+  const authenticated = useVerifyToken();
   const [isOpen, setIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
@@ -70,6 +72,10 @@ export default function Update() {
       }
     },
   });
+
+  if (!authenticated) {
+    return <Loader />;
+  }
 
   return (
     <>

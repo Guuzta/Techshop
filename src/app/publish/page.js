@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useVerifyToken } from "@/hooks/verifyToken";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 
@@ -11,8 +12,10 @@ import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import SuccessModal from "@/components/SuccessModal";
 import ErrorToast from "@/components/ErrorToast";
+import Loader from "@/components/Loader";
 
 export default function Publish() {
+  const authenticated = useVerifyToken();
   const [file, setFile] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -98,6 +101,10 @@ export default function Publish() {
       setShowToast(false);
     }, 3000);
   };
+
+  if (!authenticated) {
+    return <Loader />;
+  }
 
   return (
     <>

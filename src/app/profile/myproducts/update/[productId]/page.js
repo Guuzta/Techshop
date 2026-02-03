@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { useVerifyToken } from "@/hooks/verifyToken";
 
 import { useFormik } from "formik";
 import productSchema from "./productSchema";
@@ -11,9 +12,9 @@ import Footer from "@/components/Footer";
 import SuccessModal from "@/components/SuccessModal";
 import ErrorToast from "@/components/ErrorToast";
 import Loader from "@/components/Loader";
-import { parse } from "postcss";
 
 export default function Update() {
+  const authenticated = useVerifyToken();
   const [product, setProduct] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -107,6 +108,10 @@ export default function Update() {
       }
     },
   });
+
+  if (!authenticated) {
+    return <Loader />;
+  }
 
   return (
     <>

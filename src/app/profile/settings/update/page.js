@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useVerifyToken } from "@/hooks/verifyToken";
 import Link from "next/link";
 import { jwtDecode } from "jwt-decode";
 
@@ -14,6 +15,7 @@ import ErrorToast from "@/components/ErrorToast";
 import Loader from "@/components/Loader";
 
 export default function Update() {
+  const authenticated = useVerifyToken();
   const [payload, setPayload] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
@@ -77,6 +79,10 @@ export default function Update() {
       }
     },
   });
+
+  if (!authenticated) {
+    return <Loader />;
+  }
 
   return (
     <>
