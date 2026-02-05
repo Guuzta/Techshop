@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useVerifyToken } from "@/hooks/verifyToken";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
+import Link from "next/link";
+
+import { logout } from "@/utils/logout";
 
 import {
   PencilSquareIcon,
@@ -16,6 +19,7 @@ import Loader from "@/components/Loader";
 import ErrorToast from "@/components/ErrorToast";
 
 export default function Settings() {
+  const router = useRouter();
   const authenticated = useVerifyToken();
   const [payload, setPayload] = useState("");
   const [userSince, setUserSince] = useState("");
@@ -67,6 +71,16 @@ export default function Settings() {
 
     fecthData();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/login");
+    } catch (error) {
+      console.log(error);
+      handleShowToast();
+    }
+  };
 
   if (!authenticated) {
     return <Loader />;
@@ -120,6 +134,7 @@ export default function Settings() {
               <ArrowRightStartOnRectangleIcon className="mb-4 size-9 m-auto text-red-500" />
               <Link
                 href="#"
+                onClick={handleLogout}
                 className="rounded-md bg-red-500 px-3.5 py-2.5 text-sm font-semibold text-black shadow-xs hover:bg-red-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-500"
               >
                 Sair
