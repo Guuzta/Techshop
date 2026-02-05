@@ -2,7 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+
+import { logout } from "@/utils/logout";
+
+import ErrorToast from "./ErrorToast";
 
 import {
   Disclosure,
@@ -19,6 +24,7 @@ import { Bars3Icon, XMarkIcon, CpuChipIcon } from "@heroicons/react/24/outline";
 export default function NavBar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [showToast, setShowToast] = useState(false);
 
   const navigation = [
     { name: "Home", href: "/", current: true },
@@ -31,26 +37,20 @@ export default function NavBar() {
     return classes.filter(Boolean).join(" ");
   }
 
-  const fecthLogout = async () => {
-    const token = localStorage.getItem("accessToken");
+  const handleShowToast = () => {
+    setShowToast(true);
 
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+  };
+
+  const handleLogout = async () => {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/logout`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (res.ok) {
-        localStorage.removeItem("accessToken");
-        return router.push("/login");
-      }
-    } catch (error) {
-      console.log(error);
+      await logout();
+      router.push("/login");
+    } catch {
+      handleShowToast();
     }
   };
 
@@ -137,7 +137,7 @@ export default function NavBar() {
                 </MenuItem>
                 <MenuItem>
                   <Link
-                    onClick={fecthLogout}
+                    onClick={handleLogout}
                     href="#"
                     className="block px-4 py-2 text-sm text-red-500 data-focus:bg-white/5 data-focus:outline-hidden"
                   >
@@ -171,6 +171,8 @@ export default function NavBar() {
           })}
         </div>
       </DisclosurePanel>
+
+      <ErrorToast showToast={showToast} />
     </Disclosure>
   );
 }
