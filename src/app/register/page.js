@@ -67,8 +67,6 @@ export default function Register() {
       setEmail("");
       setPassword("");
     } catch (error) {
-      //newErrors.push(error.message);
-      //setError(newErrors);
       handleShowToast();
     } finally {
       setLoading(false);
