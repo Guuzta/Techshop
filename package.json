@@ -14,7 +14,7 @@
     "@tailwindplus/elements": "^1.0.22",
     "formik": "^2.4.9",
     "jwt-decode": "^4.0.0",
-    "next": "16.1.1",
+    "next": "^16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-dropzone": "^14.3.8",
