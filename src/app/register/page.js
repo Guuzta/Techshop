@@ -8,6 +8,7 @@ import { UserPlusIcon } from "@heroicons/react/24/solid";
 
 import Input from "../../components/Input";
 import SuccessModal from "../../components/SuccessModal";
+import ErrorToast from "@/components/ErrorToast";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -17,8 +18,17 @@ export default function Register() {
   const [error, setError] = useState([]);
   const [success, setSuccess] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const router = useRouter();
+
+  const handleShowToast = () => {
+    setShowToast(true);
+
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,7 +46,7 @@ export default function Register() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, email, password }),
-        }
+        },
       );
 
       const data = await res.json();
@@ -57,8 +67,9 @@ export default function Register() {
       setEmail("");
       setPassword("");
     } catch (error) {
-      newErrors.push(error.message);
-      setError(newErrors);
+      //newErrors.push(error.message);
+      //setError(newErrors);
+      handleShowToast();
     } finally {
       setLoading(false);
     }
@@ -156,6 +167,8 @@ export default function Register() {
           showDenyButton={true}
         />
       )}
+
+      <ErrorToast showToast={showToast} />
     </div>
   );
 }
