@@ -8,6 +8,7 @@ import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/solid";
 
 import Input from "../../components/Input";
 import SuccessModal from "../../components/SuccessModal";
+import ErrorToast from "@/components/ErrorToast";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -16,8 +17,17 @@ export default function Register() {
   const [error, setError] = useState([]);
   const [success, setSuccess] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
   const router = useRouter();
+
+  const handleShowToast = () => {
+    setShowToast(true);
+
+    setTimeout(() => {
+      setShowToast(false);
+    }, 3000);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -58,8 +68,7 @@ export default function Register() {
       setEmail("");
       setPassword("");
     } catch (error) {
-      newErrors.push(error.message);
-      setError(newErrors);
+      handleShowToast();
     } finally {
       setLoading(false);
     }
@@ -148,6 +157,8 @@ export default function Register() {
           showDenyButton={false}
         />
       )}
+
+      <ErrorToast showToast={showToast} />
     </div>
   );
 }
